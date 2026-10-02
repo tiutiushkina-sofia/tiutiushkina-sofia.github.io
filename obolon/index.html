@@ -24,7 +24,7 @@ html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);
 .maplibregl-ctrl-group{border:1px solid var(--line);box-shadow:0 2px 10px rgba(22,36,59,.12)}
 
 .panel{position:absolute;left:24px;top:24px;bottom:24px;width:376px;max-width:calc(100vw - 48px);
-  display:flex;flex-direction:column;gap:18px;padding:26px 26px 20px;overflow:auto;
+  display:flex;flex-direction:column;gap:14px;padding:22px 24px 16px;overflow:auto;
   background:rgba(255,255,255,.95);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   border:1px solid var(--line);border-radius:16px;box-shadow:0 14px 40px rgba(22,36,59,.16)}
 .kicker{margin:0;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--green)}
@@ -38,8 +38,12 @@ h1{margin:6px 0 0;font-size:23px;line-height:1.22;font-weight:800;letter-spacing
 .row .dot{width:14px;height:14px;border-radius:4px}
 .row .lbl{font-size:14px;line-height:1.3;color:var(--ink)}
 .row .lbl small{display:block;font-size:12px;color:var(--mid);margin-top:2px}
+.row .lbl small.d{color:var(--ink);opacity:.72}
+.row.total{padding-top:12px;margin-top:2px;border-top:1px solid var(--line)}
 .row .pc{font-size:26px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 
+.sum{margin:0;padding:12px 14px;border-radius:10px;background:#fdf1ef;border-left:4px solid var(--red);font-size:13.5px;line-height:1.45;color:var(--ink)}
+.sum b{font-weight:800;color:#c23a2b}
 .legend{display:grid;gap:10px;font-size:13px;color:var(--ink);padding-top:16px;border-top:1px solid var(--line)}
 .legend div{display:flex;align-items:center;gap:11px}
 .sw{flex:none;width:20px;height:14px;border-radius:3px}
@@ -67,16 +71,19 @@ h1{margin:6px 0 0;font-size:23px;line-height:1.22;font-weight:800;letter-spacing
     <p class="kicker">Оболонський район · Київ</p>
     <h1>Кожна шоста будівля має укриття в межах 100 м, а майже половина не має його й у межах 300 м</h1>
   </div>
-  <p class="lead">Будівлі пофарбовано за відстанню до найближчого укриття. Зони навколо укриттів показують радіуси 100 і 300 м.</p>
+  <p class="lead">На Оболоні 412 укриттів, і жодне з них не позначене на мапі доступних укриттів ЛУН. Тож ніхто не може підтвердити, що двері відчинені й укриття придатне.</p>
 
   <div>
     <div class="stack"><i id="s1" style="background:var(--green)"></i><i id="s2" style="background:var(--yellow)"></i><i id="s3" style="background:var(--red)"></i></div>
     <div class="rows">
-      <div class="row"><span class="dot" style="background:var(--green)"></span><span class="lbl">до 100 м<small id="n1"></small></span><span class="pc" id="p1" style="color:var(--green)">0</span></div>
-      <div class="row"><span class="dot" style="background:var(--yellow)"></span><span class="lbl">100–300 м<small id="n2"></small></span><span class="pc" id="p2" style="color:#c98a00">0</span></div>
-      <div class="row"><span class="dot" style="background:var(--red)"></span><span class="lbl">понад 300 м, поза зонами<small id="n3"></small></span><span class="pc" id="p3" style="color:var(--red)">0</span></div>
+      <div class="row"><span class="dot" style="background:var(--green)"></span><span class="lbl">до 100 м<small class="d">швидкий доступ</small><small id="n1"></small></span><span class="pc" id="p1" style="color:var(--green)">0</span></div>
+      <div class="row"><span class="dot" style="background:var(--yellow)"></span><span class="lbl">100–300 м<small class="d">нормативна доступність</small><small id="n2"></small></span><span class="pc" id="p2" style="color:#c98a00">0</span></div>
+      <div class="row"><span class="dot" style="background:var(--red)"></span><span class="lbl">понад 300 м<small class="d">поза нормативом</small><small id="n3"></small></span><span class="pc" id="p3" style="color:var(--red)">0</span></div>
+      <div class="row total"><span class="dot" style="background:linear-gradient(90deg,var(--green) 50%,var(--yellow) 50%)"></span><span class="lbl">разом у межах 300 м<small id="nt"></small></span><span class="pc" id="pt" style="color:var(--ink)">0</span></div>
     </div>
   </div>
+
+  <p class="sum" id="sum"></p>
 
   <div class="legend">
     <div><span class="sw pt"></span><span>Укриття: <span id="shN">412</span> у районі</span></div>
@@ -84,7 +91,6 @@ h1{margin:6px 0 0;font-size:23px;line-height:1.22;font-weight:800;letter-spacing
     <div><span class="sw" style="background:rgba(245,184,46,.38)"></span><span>Зона 300 м від укриттів</span></div>
   </div>
 
-  <p class="note">Будівля належить до класу, якщо повністю лежить у відповідній зоні навколо укриттів; зони укриттів об'єднано й обрізано по межі району. Враховано й радіуси укриттів сусідніх районів, що заходять на Оболонь. Частково зачеплені будівлі переходять до наступного класу.</p>
 </aside>
 
 <script src="maplibre-gl.js"></script>
@@ -146,7 +152,9 @@ h1{margin:6px 0 0;font-size:23px;line-height:1.22;font-weight:800;letter-spacing
         document.getElementById('n'+k).textContent=fmt(n[k])+' з '+fmt(t)+' будівель';
         setTimeout(function(){document.getElementById('s'+k).style.width=(n[k]/t*100)+'%'},80);
       });
-      document.getElementById('n2').textContent=fmt(n[2])+' · разом у межах 300 м: '+fmt(n[1]+n[2])+' ('+pc(n[1]+n[2],t)+' %)';
+      document.getElementById('pt').textContent=pc(n[1]+n[2],t)+' %';
+      document.getElementById('nt').textContent=fmt(n[1]+n[2])+' з '+fmt(t)+' будівель';
+      document.getElementById('sum').innerHTML='<b>'+fmt(t-n[1])+' будівель</b> ('+pc(t-n[1],t)+' %) не мають укриття в межах 100 м, а <b>'+fmt(n[3])+'</b> ('+pc(n[3],t)+' %) не мають його навіть у межах нормативних 300 м.';
       document.getElementById('shN').textContent=fmt(S.features.length);
 
       // стартовий кадр: забудоване ядро

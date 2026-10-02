@@ -54,7 +54,7 @@ h1{margin:5px 0 0;font-size:19px;line-height:1.25;font-weight:800;letter-spacing
     <p class="kicker">Київ · 99 104 будівлі</p>
     <h1>Відстань від будівель до найближчого укриття</h1>
   </div>
-  <p class="lead">Кожну будівлю пофарбовано за відстанню по прямій від її центроїда до найближчого з 4 190 укриттів. <b>Чим червоніша будівля, тим далі від неї укриття.</b></p>
+  <p class="lead">У Києві 4 190 укриттів на 99 104 будівлі. <b>Лише кожна п'ята будівля (19,7 %) стоїть у межах 100 м від укриття, а майже кожна четверта (23,8 %) віддалена від нього більш ніж на 500 м.</b> Чим червоніша будівля, тим далі від неї укриття.</p>
 
   <div>
     <p class="cap">Частка будівель Києва за відстанню</p>
@@ -71,7 +71,6 @@ h1{margin:5px 0 0;font-size:19px;line-height:1.25;font-weight:800;letter-spacing
     </div>
   </div>
 
-  <p class="note">У межах 300 м від укриття розташовано 59,1 % будівель, далі ніж 500 м — 23,8 %. Відстань рахується від центроїда будівлі, тому відсотки відрізняються від показників за повним знаходженням у зоні. Дані: OpenStreetMap, база укриттів.</p>
 </aside>
 
 <script src="maplibre-gl.js"></script>
@@ -85,6 +84,7 @@ h1{margin:5px 0 0;font-size:19px;line-height:1.25;font-weight:800;letter-spacing
   fetch(STYLE).then(function(r){if(!r.ok)throw new Error('style');return r.json()}).then(function(st){
     // тайли є лише до z14: далі масштабуємо їх, а не ховаємо шари
     st.sources.q2vt_tiles.minzoom=8;st.sources.q2vt_tiles.maxzoom=14;
+    st.layers=st.layers.filter(function(l){return !/^l35/.test(l.id)});
     st.layers.forEach(function(l){if(l.source==='q2vt_tiles'){l.maxzoom=24}});
     // світла підкладка, така сама, як на карті Оболоні
     st.layers=st.layers.map(function(l){
