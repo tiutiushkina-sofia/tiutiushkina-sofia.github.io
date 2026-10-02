@@ -26,7 +26,10 @@
       "type": "raster",
       "source": "osm",
       "minzoom": 0,
-      "maxzoom": 22
+      "maxzoom": 22,
+      "paint": {
+        "raster-opacity": 0.4
+      }
     },
     {
       "id": "l35t00d01r00g02c01o08i14s00",
