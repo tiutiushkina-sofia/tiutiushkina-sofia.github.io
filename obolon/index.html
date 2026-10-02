@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Оболонь: доступність укриттів</title>
+<meta name="description" content="Скільки будівель Оболоні мають укриття в межах 100 і 300 метрів. Інтерактивна карта.">
+<meta property="og:title" content="Оболонь: лише кожна п'ята будівля має укриття в межах 100 м">
+<meta property="og:description" content="Інтерактивна карта укриттів, їхніх радіусів і будівель Оболонського району Києва.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+<style>
+:root{
+  --navy:#00398A; --night:#061633; --ink:#0a1f44;
+  --cyan:#4ED9E8; --cyan-l:#DCF7FA; --coral:#F85332; --yellow:#FFF58D;
+  --mid:#A3B8D5; --light:#CCD7E8;
+  --glass:rgba(6,22,51,.78);
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--night);color:#fff;
+  font-family:Manrope,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased}
+#map{position:absolute;inset:0}
+.maplibregl-ctrl-attrib{background:rgba(6,22,51,.7)!important;color:var(--mid)!important;font-size:11px}
+.maplibregl-ctrl-attrib a{color:var(--light)!important}
+.maplibregl-ctrl-group{background:var(--glass);border:1px solid rgba(163,184,213,.25);box-shadow:none}
+.maplibregl-ctrl-group button{filter:invert(1) brightness(1.2)}
+.maplibregl-ctrl-group button+button{border-top:1px solid rgba(163,184,213,.25)}
+
+.panel{position:absolute;left:24px;top:24px;bottom:24px;width:376px;max-width:calc(100vw - 48px);
+  display:flex;flex-direction:column;gap:18px;padding:26px 26px 20px;overflow:auto;
+  background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1px solid rgba(163,184,213,.22);border-radius:16px;box-shadow:0 18px 50px rgba(0,0,0,.45)}
+.kicker{margin:0;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan)}
+h1{margin:6px 0 0;font-size:25px;line-height:1.2;font-weight:800;letter-spacing:-.01em}
+.lead{margin:0;font-size:14.5px;line-height:1.55;color:var(--light)}
+
+.seg{display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:12px;background:rgba(163,184,213,.12);border:1px solid rgba(163,184,213,.2)}
+.seg button{font:600 14px/1 Manrope,sans-serif;color:var(--light);background:none;border:0;border-radius:9px;padding:11px 8px;cursor:pointer;transition:.25s}
+.seg button[aria-pressed=true]{background:var(--cyan);color:var(--ink)}
+.seg button:focus-visible{outline:2px solid var(--yellow);outline-offset:2px}
+
+.big{display:flex;align-items:baseline;gap:10px}
+.big .n{font-size:64px;line-height:1;font-weight:800;letter-spacing:-.03em;color:var(--cyan);font-variant-numeric:tabular-nums}
+.big .u{font-size:22px;font-weight:600;color:var(--cyan)}
+.cap{margin:6px 0 0;font-size:14px;color:var(--light);line-height:1.45}
+.cap b{color:#fff;font-weight:600}
+.bar{height:8px;border-radius:99px;background:var(--coral);overflow:hidden;margin-top:14px}
+.bar i{display:block;height:100%;width:0;background:var(--cyan);border-radius:99px;transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.barlbl{display:flex;justify-content:space-between;font-size:12px;color:var(--mid);margin-top:7px}
+.barlbl span:last-child{color:#ff9a86}
+
+.legend{display:grid;gap:9px;font-size:13px;color:var(--light);padding-top:16px;border-top:1px solid rgba(163,184,213,.2)}
+.legend div{display:flex;align-items:center;gap:11px}
+.sw{flex:none;width:20px;height:14px;border-radius:3px}
+.sw.b1{background:var(--cyan)} .sw.b2{background:var(--coral)}
+.sw.pt{width:10px;height:10px;margin:0 5px;border-radius:50%;background:var(--yellow);box-shadow:0 0 0 4px rgba(255,245,141,.25)}
+.sw.ring{width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(78,217,232,.9);background:rgba(78,217,232,.16)}
+.note{margin:auto 0 0;font-size:11.5px;line-height:1.5;color:var(--mid)}
+.note a{color:var(--light)}
+
+.loading{position:absolute;inset:0;display:grid;place-items:center;background:var(--night);z-index:5;transition:opacity .6s;color:var(--mid);font-size:14px}
+.loading.off{opacity:0;pointer-events:none}
+
+@media (max-width:760px){
+  .panel{left:10px;right:10px;top:auto;bottom:10px;width:auto;max-width:none;max-height:56vh;padding:18px 18px 14px;gap:13px}
+  h1{font-size:19px}
+  .lead,.legend .hide-m{display:none}
+  .big .n{font-size:46px}.big .u{font-size:18px}
+  .note{display:none}
+  .legend{grid-template-columns:1fr 1fr;padding-top:12px}
+  .maplibregl-ctrl-top-right{top:0}
+}
+</style>
+</head>
+<body>
+<div id="map" aria-label="Карта укриттів Оболоні"></div>
+<div class="loading" id="loading">Завантаження карти…</div>
+
+<aside class="panel">
+  <div>
+    <p class="kicker">Оболонський район · Київ</p>
+    <h1 id="title">Лише кожна п'ята будівля має укриття в межах 100 м</h1>
+  </div>
+  <p class="lead">Жовті точки — укриття. Навколо кожного показано радіус доступності. Будівлі поза колами лишаються без укриття поруч.</p>
+
+  <div class="seg" role="group" aria-label="Радіус доступності">
+    <button type="button" data-r="100" aria-pressed="true">100 м</button>
+    <button type="button" data-r="300" aria-pressed="false">300 м</button>
+  </div>
+
+  <div>
+    <div class="big"><span class="n" id="pct">0</span><span class="u">%</span></div>
+    <p class="cap" id="cap">будівель мають укриття в межах 100 м</p>
+    <div class="bar"><i id="barfill"></i></div>
+    <div class="barlbl"><span id="inN"></span><span id="outN"></span></div>
+  </div>
+
+  <div class="legend">
+    <div><span class="sw pt"></span><span>Укриття: <span id="shN">412</span> у районі</span></div>
+    <div><span class="sw ring"></span><span id="ringLbl">Радіус 100 м</span></div>
+    <div><span class="sw b1"></span>Будівля в межах радіуса</div>
+    <div><span class="sw b2"></span>Будівля поза радіусом</div>
+  </div>
+
+  <p class="note">Відстань рахується по прямій від центроїда будівлі до найближчого укриття, з урахуванням укриттів сусідніх районів. У вибірці всі будівлі OpenStreetMap, зокрема гаражі та господарські споруди; місткість укриттів не враховано. Дані: OpenStreetMap, база укриттів. Аналіз: <span id="author">KSE Institute</span>.</p>
+</aside>
+
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.min.js"></script>
+<script>
+(function(){
+  var C={cyan:'#4ED9E8',coral:'#F85332',yellow:'#FFF58D',navy:'#00398A'};
+  var TITLES={
+    100:"Лише кожна п'ята будівля має укриття в межах 100 м",
+    300:"Навіть у межах 300 м укриття є лише в трохи більше ніж половини будівель"
+  };
+  var fmt=function(n){return n.toLocaleString('uk-UA').replace(/ /g,' ')};
+  var state={r:100,pct:0,raf:0};
+
+  var map=new maplibregl.Map({
+    container:'map',
+    style:{
+      version:8,
+      sources:{base:{type:'raster',tileSize:256,maxzoom:19,
+        tiles:['a','b','c','d'].map(function(s){return 'https://'+s+'.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}@2x.png'}),
+        attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · © <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'}},
+      layers:[
+        {id:'bg',type:'background',paint:{'background-color':'#061633'}},
+        {id:'base',type:'raster',source:'base',paint:{'raster-opacity':.85,'raster-saturation':-.2}}
+      ]
+    },
+    center:[30.42,50.53],zoom:12,minZoom:10.5,maxZoom:18,attributionControl:{compact:true}
+  });
+  map.addControl(new maplibregl.NavigationControl({showCompass:false}),'top-right');
+
+  function load(n){return fetch('data/'+n+'.geojson').then(function(r){if(!r.ok)throw new Error(n);return r.json()})}
+
+  map.on('load',function(){
+    Promise.all(['buildings','shelters','cover100','cover300','rings100','rings300','district','mask'].map(load)).then(function(d){
+      var B=d[0],S=d[1],cv1=d[2],cv3=d[3],rg1=d[4],rg3=d[5],dist=d[6],mask=d[7];
+      var add=function(id,data){map.addSource(id,{type:'geojson',data:data})};
+      add('buildings',B);add('shelters',S);add('cover100',cv1);add('cover300',cv3);
+      add('rings100',rg1);add('rings300',rg3);add('district',dist);add('mask',mask);
+
+      // затемнення поза районом
+      map.addLayer({id:'mask',type:'fill',source:'mask',paint:{'fill-color':'#041029','fill-opacity':.78}});
+
+      // зона доступності: заливка + контур об'єднання
+      [100,300].forEach(function(r){
+        map.addLayer({id:'cover'+r,type:'fill',source:'cover'+r,paint:{
+          'fill-color':C.cyan,'fill-opacity':r===100?.16:0,'fill-opacity-transition':{duration:700}}});
+        map.addLayer({id:'rings'+r,type:'line',source:'rings'+r,paint:{
+          'line-color':C.cyan,'line-width':1,'line-opacity':r===100?.5:0,'line-opacity-transition':{duration:700}}});
+      });
+
+      // будівлі
+      map.addLayer({id:'bld',type:'fill',source:'buildings',paint:{
+        'fill-color':['case',['<=',['get','d'],100],C.cyan,C.coral],
+        'fill-color-transition':{duration:800},
+        'fill-opacity':.95}});
+      map.addLayer({id:'bld-line',type:'line',source:'buildings',minzoom:14.5,paint:{
+        'line-color':'#061633','line-width':.4,'line-opacity':.7}});
+
+      // межа району
+      map.addLayer({id:'district',type:'line',source:'district',paint:{
+        'line-color':C.cyan,'line-width':1.6,'line-opacity':.9}});
+
+      // укриття: світіння + точка
+      map.addLayer({id:'sh-glow',type:'circle',source:'shelters',paint:{
+        'circle-radius':['interpolate',['linear'],['zoom'],11,7,15,13,18,18],
+        'circle-color':C.yellow,'circle-opacity':.22,'circle-blur':.9}});
+      map.addLayer({id:'sh',type:'circle',source:'shelters',paint:{
+        'circle-radius':['interpolate',['linear'],['zoom'],11,2.2,15,4,18,6],
+        'circle-color':C.yellow,'circle-stroke-color':'#061633','circle-stroke-width':1,'circle-opacity':1}});
+
+      // підрахунки з даних
+      var ds=B.features.map(function(f){return f.properties.d});
+      var total=ds.length;
+      function count(r){return ds.filter(function(x){return x<=r}).length}
+      state.counts={100:count(100),300:count(300),total:total};
+
+      // початковий кадр: забудоване ядро району (де є укриття)
+      var b=new maplibregl.LngLatBounds();
+      var dg=dist.features[0].geometry,polys=dg.type==='Polygon'?[dg.coordinates]:dg.coordinates;
+      var inD=function(pt){return polys.some(function(p){return pip(pt,p[0])})};
+      function pip(pt,ring){var x=pt[0],y=pt[1],c=false;for(var i=0,j=ring.length-1;i<ring.length;j=i++){var xi=ring[i][0],yi=ring[i][1],xj=ring[j][0],yj=ring[j][1];if(((yi>y)!==(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi))c=!c}return c}
+      var nIn=0;S.features.forEach(function(f){if(inD(f.geometry.coordinates)){b.extend(f.geometry.coordinates);nIn++}});
+      document.getElementById('shN').textContent=fmt(nIn);
+      var wide=window.innerWidth>760;
+      map.fitBounds(b,{padding:wide?{top:60,bottom:60,left:440,right:60}:{top:20,bottom:window.innerHeight*.5,left:10,right:10},duration:0});
+      state.bounds=b;
+
+      setRadius(100,true);
+      document.getElementById('loading').classList.add('off');
+    }).catch(function(e){
+      document.getElementById('loading').textContent='Не вдалося завантажити дані карти';
+      console.error(e);
+    });
+  });
+
+  function tween(to){
+    cancelAnimationFrame(state.raf);
+    var from=state.pct,t0=performance.now(),dur=900,el=document.getElementById('pct');
+    (function step(t){
+      var k=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-k,3),v=from+(to-from)*e;
+      el.textContent=v.toFixed(1).replace('.',',');
+      state.pct=v;
+      if(k<1)state.raf=requestAnimationFrame(step);
+    })(t0);
+  }
+
+  function setRadius(r,init){
+    state.r=r;
+    var c=state.counts,n=c[r],t=c.total,p=n/t*100;
+    document.getElementById('title').textContent=TITLES[r];
+    document.getElementById('cap').innerHTML='будівель мають укриття в межах <b>'+r+' м</b>';
+    document.getElementById('inN').textContent=fmt(n)+' з '+fmt(t)+' будівель';
+    document.getElementById('outN').textContent=fmt(t-n)+' без укриття';
+    document.getElementById('ringLbl').textContent='Радіус '+r+' м навколо укриття';
+    document.getElementById('barfill').style.width=p+'%';
+    tween(p);
+    document.querySelectorAll('.seg button').forEach(function(b){b.setAttribute('aria-pressed',String(+b.dataset.r===r))});
+    map.setPaintProperty('bld','fill-color',['case',['<=',['get','d'],r],C.cyan,C.coral]);
+    [100,300].forEach(function(x){
+      map.setPaintProperty('cover'+x,'fill-opacity',x===r?(x===100?.16:.12):0);
+      map.setPaintProperty('rings'+x,'line-opacity',x===r?(x===100?.5:.35):0);
+    });
+  }
+
+  document.querySelectorAll('.seg button').forEach(function(b){
+    b.addEventListener('click',function(){var r=+b.dataset.r;if(r!==state.r&&state.counts)setRadius(r)});
+  });
+})();
+</script>
+</body>
+</html>
