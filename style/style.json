@@ -1,0 +1,420 @@
+{
+  "version": 8,
+  "name": "q2vt_tiles_style",
+  "sources": {
+    "q2vt_tiles": {
+      "type": "vector",
+      "tiles": [
+        "https://tiutiushkina-sofia.github.io/tiles/tiles/{z}/{x}/{y}.pbf?v=2"
+      ]
+    },
+    "osm": {
+      "type": "raster",
+      "tiles": [
+        "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        "https://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      ],
+      "tileSize": 256,
+      "attribution": "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors"
+    }
+  },
+  "glyphs": "https://tiutiushkina-sofia.github.io/style/glyphs/{fontstack}/{range}.pbf",
+  "layers": [
+    {
+      "id": "osm-background",
+      "type": "raster",
+      "source": "osm",
+      "minzoom": 0,
+      "maxzoom": 22
+    },
+    {
+      "id": "l35t00d01r00g02c01o08i14s00",
+      "type": "line",
+      "source": "q2vt_tiles",
+      "source-layer": "l35t00d01r00g02c01o08i14s00",
+      "paint": {
+        "line-color": "rgba(35, 35, 35, 1.0)",
+        "line-width": 0.98,
+        "line-opacity": 1,
+        "line-blur": 0,
+        "line-gap-width": 0,
+        "line-translate": [
+          0,
+          0
+        ],
+        "line-translate-anchor": "map"
+      },
+      "layout": {
+        "line-cap": "square",
+        "line-join": "bevel",
+        "line-miter-limit": 2,
+        "line-round-limit": 1.05,
+        "line-sort-key": 0,
+        "visibility": "visible"
+      },
+      "minzoom": 8,
+      "maxzoom": 15
+    },
+    {
+      "id": "l29t00d01r05g02c02o08i14s00",
+      "type": "fill",
+      "source": "q2vt_tiles",
+      "source-layer": "l29t00d01r05g02c02o08i14s00",
+      "paint": {
+        "fill-color": "rgba(168, 36, 16, 1.0)",
+        "fill-opacity": 1,
+        "fill-antialias": true,
+        "fill-translate": [
+          0,
+          0
+        ],
+        "fill-translate-anchor": "map"
+      },
+      "layout": {},
+      "minzoom": 8,
+      "maxzoom": 15
+    },
+    {
+      "id": "l29t00d01r05g02c01o08i14s00",
+      "type": "line",
+      "source": "q2vt_tiles",
+      "source-layer": "l29t00d01r05g02c01o08i14s00",
+      "paint": {
+        "line-color": "rgba(168, 36, 16, 1.0)",
+        "line-width": 0.38,
+        "line-opacity": 1,
+        "line-blur": 0,
+        "line-gap-width": 0,
+        "line-translate": [
+          0,
+          0
+        ],
+        "line-translate-anchor": "map"
+      },
+      "layout": {
+        "line-cap": "square",
+        "line-join": "bevel",
+        "line-miter-limit": 2,
+        "line-round-limit": 1.05,
+        "line-sort-key": 0,
+        "visibility": "visible"
+      },
+      "minzoom": 8,
+      "maxzoom": 15
+    },
+    {
+      "id": "l29t00d01r04g02c02o08i14s00",
+      "type": "fill",
+      "source": "q2vt_tiles",
+      "source-layer": "l29t00d01r04g02c02o08i14s00",
+      "paint": {
+        "fill-color": "rgba(248, 83, 50, 1.0)",
+        "fill-opacity": 1,
+        "fill-antialias": true,
+        "fill-translate": [
+          0,
+          0
+        ],
+        "fill-translate-anchor": "map"
+      },
+      "layout": {},
+      "minzoom": 8,
+      "maxzoom": 15
+    },
+    {
+      "id": "l29t00d01r04g02c01o08i14s00",
+      "type": "line",
+      "source": "q2vt_tiles",
+      "source-layer": "l29t00d01r04g02c01o08i14s00",
+      "paint": {
+        "line-color": "rgba(248, 83, 50, 1.0)",
+        "line-width": 0.38,
+        "line-opacity": 1,
+        "line-blur": 0,
+        "line-gap-width": 0,
+        "line-translate": [
+          0,
+          0
+        ],
+        "line-translate-anchor": "map"
+      },
+      "layout": {
+        "line-cap": "square",
+        "line-join": "bevel",
+        "line-miter-limit": 2,
+        "line-round-limit": 1.05,
+        "line-sort-key": 0,
+        "visibility": "visible"
+      },
+      "minzoom": 8,
+      "maxzoom": 15
+    },
+    {
+      "id": "l29t00d01r03g02c02o08i14s00",
+      "type": "fill",
+      "source": "q2vt_tiles",
+      "source-layer": "l29t00d01r03g02c02o08i14s00",
+      "paint": {
+        "fill-color": "rgba(255, 165, 62, 1.0)",
+        "fill-opacity": 1,
+        "fill-antialias": true,
+        "fill-translate": [
+          0,
+          0
+        ],
+        "fill-translate-anchor": "map"
+      },
+      "layout": {},
+      "minzoom": 8,
+      "maxzoom": 15
+    },
+    {
+      "id": "l29t00d01r03g02c01o08i14s00",
+      "type": "line",
+      "source": "q2vt_tiles",
+      "source-layer": "l29t00d01r03g02c01o08i14s00",
+      "paint": {
+        "line-color": "rgba(255, 165, 62, 1.0)",
+        "line-width": 0.38,
+        "line-opacity": 1,
+        "line-blur": 0,
+        "line-gap-width": 0,
+        "line-translate": [
+          0,
+          0
+        ],
+        "line-translate-anchor": "map"
+      },
+      "layout": {
+        "line-cap": "square",
+        "line-join": "bevel",
+        "line-miter-limit": 2,
+        "line-round-limit": 1.05,
+        "line-sort-key": 0,
+        "visibility": "visible"
+      },
+      "minzoom": 8,
+      "maxzoom": 15
+    },
+    {
+      "id": "l29t00d01r02g02c02o08i14s00",
+      "type": "fill",
+      "source": "q2vt_tiles",
+      "source-layer": "l29t00d01r02g02c02o08i14s00",
+      "paint": {
+        "fill-color": "rgba(255, 201, 139, 1.0)",
+        "fill-opacity": 1,
+        "fill-antialias": true,
+        "fill-translate": [
+          0,
+          0
+        ],
+        "fill-translate-anchor": "map"
+      },
+      "layout": {},
+      "minzoom": 8,
+      "maxzoom": 15
+    },
+    {
+      "id": "l29t00d01r02g02c01o08i14s00",
+      "type": "line",
+      "source": "q2vt_tiles",
+      "source-layer": "l29t00d01r02g02c01o08i14s00",
+      "paint": {
+        "line-color": "rgba(255, 201, 139, 1.0)",
+        "line-width": 0.38,
+        "line-opacity": 1,
+        "line-blur": 0,
+        "line-gap-width": 0,
+        "line-translate": [
+          0,
+          0
+        ],
+        "line-translate-anchor": "map"
+      },
+      "layout": {
+        "line-cap": "square",
+        "line-join": "bevel",
+        "line-miter-limit": 2,
+        "line-round-limit": 1.05,
+        "line-sort-key": 0,
+        "visibility": "visible"
+      },
+      "minzoom": 8,
+      "maxzoom": 15
+    },
+    {
+      "id": "l29t00d01r01g02c02o08i14s00",
+      "type": "fill",
+      "source": "q2vt_tiles",
+      "source-layer": "l29t00d01r01g02c02o08i14s00",
+      "paint": {
+        "fill-color": "rgba(255, 245, 141, 1.0)",
+        "fill-opacity": 1,
+        "fill-antialias": true,
+        "fill-translate": [
+          0,
+          0
+        ],
+        "fill-translate-anchor": "map"
+      },
+      "layout": {},
+      "minzoom": 8,
+      "maxzoom": 15
+    },
+    {
+      "id": "l29t00d01r01g02c01o08i14s00",
+      "type": "line",
+      "source": "q2vt_tiles",
+      "source-layer": "l29t00d01r01g02c01o08i14s00",
+      "paint": {
+        "line-color": "rgba(255, 245, 141, 1.0)",
+        "line-width": 0.38,
+        "line-opacity": 1,
+        "line-blur": 0,
+        "line-gap-width": 0,
+        "line-translate": [
+          0,
+          0
+        ],
+        "line-translate-anchor": "map"
+      },
+      "layout": {
+        "line-cap": "square",
+        "line-join": "bevel",
+        "line-miter-limit": 2,
+        "line-round-limit": 1.05,
+        "line-sort-key": 0,
+        "visibility": "visible"
+      },
+      "minzoom": 8,
+      "maxzoom": 15
+    },
+    {
+      "id": "l29t00d01r00g02c02o08i14s00",
+      "type": "fill",
+      "source": "q2vt_tiles",
+      "source-layer": "l29t00d01r00g02c02o08i14s00",
+      "paint": {
+        "fill-color": "rgba(163, 184, 213, 1.0)",
+        "fill-opacity": 1,
+        "fill-antialias": true,
+        "fill-translate": [
+          0,
+          0
+        ],
+        "fill-translate-anchor": "map"
+      },
+      "layout": {},
+      "minzoom": 8,
+      "maxzoom": 15
+    },
+    {
+      "id": "l29t00d01r00g02c01o08i14s00",
+      "type": "line",
+      "source": "q2vt_tiles",
+      "source-layer": "l29t00d01r00g02c01o08i14s00",
+      "paint": {
+        "line-color": "rgba(163, 184, 213, 1.0)",
+        "line-width": 0.38,
+        "line-opacity": 1,
+        "line-blur": 0,
+        "line-gap-width": 0,
+        "line-translate": [
+          0,
+          0
+        ],
+        "line-translate-anchor": "map"
+      },
+      "layout": {
+        "line-cap": "square",
+        "line-join": "bevel",
+        "line-miter-limit": 2,
+        "line-round-limit": 1.05,
+        "line-sort-key": 0,
+        "visibility": "visible"
+      },
+      "minzoom": 8,
+      "maxzoom": 15
+    },
+    {
+      "id": "l35t01d01r00g02c00o08i14f00",
+      "type": "symbol",
+      "source": "q2vt_tiles",
+      "source-layer": "l35t01d01r00g02c00o08i14f00",
+      "paint": {
+        "text-color": "rgba(50, 50, 50, 1.0)",
+        "text-opacity": 1,
+        "text-halo-color": "rgb(255, 255, 255)",
+        "text-halo-width": 0,
+        "text-translate": [
+          0,
+          0
+        ],
+        "text-translate-anchor": "map",
+        "icon-opacity": 1,
+        "icon-halo-color": "rgb(0, 0, 0)",
+        "icon-halo-width": 0,
+        "icon-halo-blur": 0,
+        "icon-translate": [
+          0,
+          0
+        ],
+        "icon-translate-anchor": "map"
+      },
+      "layout": {
+        "text-field": [
+          "get",
+          "q2vt_label"
+        ],
+        "text-font": [
+          "Open Sans Regular"
+        ],
+        "text-size": 13.33,
+        "text-anchor": "center",
+        "text-justify": "center",
+        "text-offset": [
+          0,
+          0
+        ],
+        "text-radial-offset": 0.7,
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-optional": false,
+        "text-padding": 10,
+        "text-line-height": 1.2,
+        "text-letter-spacing": 0,
+        "text-transform": "none",
+        "text-max-width": 999,
+        "text-max-angle": 25,
+        "text-keep-upright": true,
+        "text-rotate": 0,
+        "text-rotation-alignment": "map",
+        "text-pitch-alignment": "viewport",
+        "symbol-placement": "point",
+        "symbol-spacing": 250,
+        "symbol-avoid-edges": false,
+        "symbol-sort-key": 0,
+        "symbol-z-order": "auto",
+        "visibility": "visible",
+        "text-variable-anchor": [
+          "bottom",
+          "bottom-left",
+          "bottom-right",
+          "left",
+          "right",
+          "top",
+          "top-left",
+          "top-right"
+        ],
+        "icon-allow-overlap": false,
+        "icon-ignore-placement": false,
+        "icon-optional": false,
+        "icon-padding": 1
+      },
+      "minzoom": 8,
+      "maxzoom": 15
+    }
+  ]
+}
