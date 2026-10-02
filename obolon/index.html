@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Оболонь: доступність укриттів</title>
 <meta name="description" content="Скільки будівель Оболоні повністю лежать у зоні 100 і 300 метрів від укриття. Інтерактивна карта.">
-<meta property="og:title" content="Оболонь: лише кожна шоста будівля має укриття в межах 100 м">
+<meta property="og:title" content="Оболонь: кожна шоста будівля має укриття в межах 100 м">
 <meta property="og:description" content="Інтерактивна карта укриттів, їхніх зон доступності та будівель Оболонського району Києва.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,56 +13,47 @@
 <link href="maplibre-gl.css" rel="stylesheet">
 <style>
 :root{
-  --navy:#00398A; --ink:#0a1f44; --cyan:#4ED9E8; --cyan-d:#12AFC4; --coral:#F85332;
-  --mid:#5b6b86; --line:#dfe5ee; --bg:#eef2f8;
+  --green:#2E9E63; --yellow:#F5B82E; --red:#E04F3F; --dgreen:#0B4F2B;
+  --ink:#16243b; --mid:#5b6b86; --line:#e1e7ef; --bg:#f1f4f9;
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);
   font-family:Manrope,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
 #map{position:absolute;inset:0}
 .maplibregl-ctrl-attrib{background:rgba(255,255,255,.8)!important;color:var(--mid)!important;font-size:11px}
-.maplibregl-ctrl-group{border:1px solid var(--line);box-shadow:0 2px 10px rgba(0,57,138,.12)}
+.maplibregl-ctrl-group{border:1px solid var(--line);box-shadow:0 2px 10px rgba(22,36,59,.12)}
 
 .panel{position:absolute;left:24px;top:24px;bottom:24px;width:376px;max-width:calc(100vw - 48px);
   display:flex;flex-direction:column;gap:18px;padding:26px 26px 20px;overflow:auto;
-  background:rgba(255,255,255,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  border:1px solid var(--line);border-radius:16px;box-shadow:0 14px 40px rgba(0,57,138,.18)}
-.kicker{margin:0;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan-d)}
-h1{margin:6px 0 0;font-size:25px;line-height:1.2;font-weight:800;letter-spacing:-.01em;color:var(--navy)}
+  background:rgba(255,255,255,.95);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid var(--line);border-radius:16px;box-shadow:0 14px 40px rgba(22,36,59,.16)}
+.kicker{margin:0;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--green)}
+h1{margin:6px 0 0;font-size:23px;line-height:1.22;font-weight:800;letter-spacing:-.01em;color:var(--ink)}
 .lead{margin:0;font-size:14.5px;line-height:1.55;color:var(--mid)}
 
-.seg{display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:12px;background:#eef2f8;border:1px solid var(--line)}
-.seg button{font:600 14px/1 Manrope,sans-serif;color:var(--mid);background:none;border:0;border-radius:9px;padding:11px 8px;cursor:pointer;transition:.25s}
-.seg button[aria-pressed=true]{background:var(--navy);color:#fff;box-shadow:0 2px 8px rgba(0,57,138,.3)}
-.seg button:focus-visible{outline:2px solid var(--cyan-d);outline-offset:2px}
-
-.big{display:flex;align-items:baseline;gap:8px}
-.big .n{font-size:64px;line-height:1;font-weight:800;letter-spacing:-.03em;color:var(--navy);font-variant-numeric:tabular-nums}
-.big .u{font-size:22px;font-weight:600;color:var(--navy)}
-.cap{margin:6px 0 0;font-size:14px;color:var(--mid);line-height:1.45}
-.cap b{color:var(--ink);font-weight:600}
-.bar{height:10px;border-radius:99px;background:var(--coral);overflow:hidden;margin-top:14px}
-.bar i{display:block;height:100%;width:0;background:var(--navy);border-radius:99px;transition:width .9s cubic-bezier(.2,.8,.2,1)}
-.barlbl{display:flex;justify-content:space-between;font-size:12px;color:var(--mid);margin-top:7px}
-.barlbl span:first-child{color:var(--navy);font-weight:600}
-.barlbl span:last-child{color:#d6401f;font-weight:600}
+.stack{display:flex;height:14px;border-radius:99px;overflow:hidden;background:var(--line)}
+.stack i{display:block;height:100%;width:0;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.rows{display:grid;gap:12px;margin-top:16px}
+.row{display:grid;grid-template-columns:14px 1fr auto;align-items:center;gap:12px}
+.row .dot{width:14px;height:14px;border-radius:4px}
+.row .lbl{font-size:14px;line-height:1.3;color:var(--ink)}
+.row .lbl small{display:block;font-size:12px;color:var(--mid);margin-top:2px}
+.row .pc{font-size:26px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 
 .legend{display:grid;gap:10px;font-size:13px;color:var(--ink);padding-top:16px;border-top:1px solid var(--line)}
 .legend div{display:flex;align-items:center;gap:11px}
 .sw{flex:none;width:20px;height:14px;border-radius:3px}
-.sw.b1{background:var(--navy)} .sw.b2{background:var(--coral)}
-.sw.pt{width:12px;height:12px;margin:0 4px;border-radius:50%;background:#FFF58D;border:2px solid var(--navy)}
-.sw.zone{background:rgba(78,217,232,.35);border:1.5px solid var(--cyan-d)}
+.sw.pt{width:12px;height:12px;margin:0 4px;border-radius:50%;background:var(--dgreen);border:1.5px solid #fff;box-shadow:0 0 0 1px var(--dgreen)}
 .note{margin:auto 0 0;font-size:11.5px;line-height:1.5;color:var(--mid)}
 
 .loading{position:absolute;inset:0;display:grid;place-items:center;background:var(--bg);z-index:5;transition:opacity .6s;color:var(--mid);font-size:14px}
 .loading.off{opacity:0;pointer-events:none}
 
 @media (max-width:760px){
-  .panel{left:10px;right:10px;top:auto;bottom:10px;width:auto;max-width:none;max-height:56vh;padding:18px 18px 14px;gap:13px}
-  h1{font-size:19px}
+  .panel{left:10px;right:10px;top:auto;bottom:10px;width:auto;max-width:none;max-height:58vh;padding:18px 18px 14px;gap:13px}
+  h1{font-size:18px}
   .lead,.note{display:none}
-  .big .n{font-size:46px}.big .u{font-size:18px}
+  .row .pc{font-size:22px}.rows{gap:9px;margin-top:12px}
   .legend{grid-template-columns:1fr 1fr;padding-top:12px}
 }
 </style>
@@ -74,42 +65,34 @@ h1{margin:6px 0 0;font-size:25px;line-height:1.2;font-weight:800;letter-spacing:
 <aside class="panel">
   <div>
     <p class="kicker">Оболонський район · Київ</p>
-    <h1 id="title">Лише кожна шоста будівля має укриття в межах 100 м</h1>
+    <h1>Кожна шоста будівля має укриття в межах 100 м, а майже половина не має його й у межах 300 м</h1>
   </div>
-  <p class="lead">Жовті точки — укриття, блакитна зона — радіус доступності навколо них. Синім виділено будівлі, які повністю лежать у зоні.</p>
-
-  <div class="seg" role="group" aria-label="Радіус доступності">
-    <button type="button" data-r="100" aria-pressed="true">100 м</button>
-    <button type="button" data-r="300" aria-pressed="false">300 м</button>
-  </div>
+  <p class="lead">Будівлі пофарбовано за відстанню до найближчого укриття району. Зони навколо укриттів показують радіуси 100 і 300 м.</p>
 
   <div>
-    <div class="big"><span class="n" id="pct">0</span><span class="u">%</span></div>
-    <p class="cap" id="cap">будівель повністю в зоні 100 м від укриття</p>
-    <div class="bar"><i id="barfill"></i></div>
-    <div class="barlbl"><span id="inN"></span><span id="outN"></span></div>
+    <div class="stack"><i id="s1" style="background:var(--green)"></i><i id="s2" style="background:var(--yellow)"></i><i id="s3" style="background:var(--red)"></i></div>
+    <div class="rows">
+      <div class="row"><span class="dot" style="background:var(--green)"></span><span class="lbl">до 100 м<small id="n1"></small></span><span class="pc" id="p1" style="color:var(--green)">0</span></div>
+      <div class="row"><span class="dot" style="background:var(--yellow)"></span><span class="lbl">100–300 м<small id="n2"></small></span><span class="pc" id="p2" style="color:#c98a00">0</span></div>
+      <div class="row"><span class="dot" style="background:var(--red)"></span><span class="lbl">понад 300 м, поза зонами<small id="n3"></small></span><span class="pc" id="p3" style="color:var(--red)">0</span></div>
+    </div>
   </div>
 
   <div class="legend">
     <div><span class="sw pt"></span><span>Укриття: <span id="shN">412</span> у районі</span></div>
-    <div><span class="sw zone"></span><span id="zoneLbl">Зона 100 м від укриттів</span></div>
-    <div><span class="sw b1"></span><span>Будівля повністю в зоні</span></div>
-    <div><span class="sw b2"></span><span>Будівля поза зоною або лише частково в ній</span></div>
+    <div><span class="sw" style="background:rgba(46,158,99,.35)"></span><span>Зона 100 м від укриттів</span></div>
+    <div><span class="sw" style="background:rgba(245,184,46,.38)"></span><span>Зона 300 м від укриттів</span></div>
   </div>
 
-  <p class="note">Забезпеченою вважається будівля, що повністю лежить у зоні 100 або 300 м навколо будь-якого укриття міста; зони укриттів об'єднано. Частково зачеплені будівлі не рахуються. У вибірці всі будівлі OpenStreetMap, зокрема гаражі та господарські споруди; місткість укриттів не враховано. Дані: OpenStreetMap, база укриттів. Аналіз: <span id="author">KSE Institute</span>.</p>
+  <p class="note">Будівля належить до класу, якщо повністю лежить у відповідній зоні навколо укриттів Оболонського району; зони укриттів об'єднано й обрізано по межі району. Частково зачеплені будівлі переходять до наступного класу. У вибірці всі будівлі OpenStreetMap, зокрема гаражі та господарські споруди; укриття сусідніх районів і місткість не враховано. Дані: OpenStreetMap, база укриттів. Аналіз: <span id="author">KSE Institute</span>.</p>
 </aside>
 
 <script src="maplibre-gl.js"></script>
 <script>
 (function(){
-  var C={navy:'#00398A',coral:'#F85332',cyan:'#4ED9E8',cyanD:'#12AFC4',yellow:'#FFF58D'};
-  var TITLES={
-    100:"Лише кожна шоста будівля має укриття в межах 100 м",
-    300:"Навіть у межах 300 м укриття мають трохи більше половини будівель"
-  };
+  var C={green:'#2E9E63',yellow:'#F5B82E',red:'#E04F3F',dgreen:'#0B4F2B'};
   var fmt=function(n){return n.toLocaleString('uk-UA').replace(/ /g,' ')};
-  var state={r:100,pct:0,raf:0};
+  var pc=function(n,t){return (n/t*100).toFixed(1).replace('.',',')};
 
   var map=new maplibregl.Map({
     container:'map',
@@ -128,101 +111,59 @@ h1{margin:6px 0 0;font-size:25px;line-height:1.2;font-weight:800;letter-spacing:
   map.addControl(new maplibregl.NavigationControl({showCompass:false}),'top-right');
 
   function load(n){return fetch('data/'+n+'.geojson').then(function(r){if(!r.ok)throw new Error(n);return r.json()})}
-  function fillExpr(r){return ['case',['==',['get',r===100?'w1':'w3'],1],C.navy,C.coral]}
+  var failed=false,started=false;
 
-  var started=false;
   function start(){
     if(started)return;started=true;
     Promise.all(['buildings','shelters','cover100','cover300','district','mask'].map(load)).then(function(d){
       var B=d[0],S=d[1],cv1=d[2],cv3=d[3],dist=d[4],mask=d[5];
-      var add=function(id,data){map.addSource(id,{type:'geojson',data:data})};
-      add('buildings',B);add('shelters',S);add('cover100',cv1);add('cover300',cv3);add('district',dist);add('mask',mask);
+      ['buildings','shelters','cover100','cover300','district','mask'].forEach(function(id,i){map.addSource(id,{type:'geojson',data:d[i]})});
 
-      // приглушення території поза районом
-      map.addLayer({id:'mask',type:'fill',source:'mask',paint:{'fill-color':'#eef2f8','fill-opacity':.78}});
+      map.addLayer({id:'mask',type:'fill',source:'mask',paint:{'fill-color':'#eef2f8','fill-opacity':.8}});
 
-      // зона доступності: одна суцільна заливка й зовнішній контур
-      [100,300].forEach(function(r){
-        map.addLayer({id:'cover'+r,type:'fill',source:'cover'+r,paint:{
-          'fill-color':C.cyan,'fill-opacity':r===100?.34:0,'fill-opacity-transition':{duration:700}}});
-        map.addLayer({id:'edge'+r,type:'line',source:'cover'+r,paint:{
-          'line-color':C.cyanD,'line-width':1.4,'line-opacity':r===100?.95:0,'line-opacity-transition':{duration:700}}});
-      });
+      // зони доступності: без контурів, прозорі; 300 м під 100 м
+      map.addLayer({id:'cover300',type:'fill',source:'cover300',paint:{'fill-color':C.yellow,'fill-opacity':.28}});
+      map.addLayer({id:'cover100',type:'fill',source:'cover100',paint:{'fill-color':C.green,'fill-opacity':.30}});
 
-      // будівлі
+      // будівлі: 1 зелені, 2 жовті, 3 червоні
       map.addLayer({id:'bld',type:'fill',source:'buildings',paint:{
-        'fill-color':fillExpr(100),'fill-color-transition':{duration:800},'fill-opacity':.92}});
+        'fill-color':['match',['get','c'],1,C.green,2,C.yellow,C.red],'fill-opacity':.94}});
       map.addLayer({id:'bld-line',type:'line',source:'buildings',minzoom:14.5,paint:{
         'line-color':'#ffffff','line-width':.5,'line-opacity':.8}});
 
-      // межа району
-      map.addLayer({id:'district',type:'line',source:'district',paint:{
-        'line-color':C.navy,'line-width':1.6,'line-opacity':.85}});
+      map.addLayer({id:'district',type:'line',source:'district',paint:{'line-color':'#5b6b86','line-width':1.2,'line-opacity':.8}});
 
-      // укриття
       map.addLayer({id:'sh',type:'circle',source:'shelters',paint:{
         'circle-radius':['interpolate',['linear'],['zoom'],11,2.6,15,4.6,18,7],
-        'circle-color':C.yellow,'circle-stroke-color':C.navy,'circle-stroke-width':['interpolate',['linear'],['zoom'],11,1,16,1.8]}});
+        'circle-color':C.dgreen,'circle-stroke-color':'#ffffff',
+        'circle-stroke-width':['interpolate',['linear'],['zoom'],11,.8,16,1.6]}});
 
-      var ds=B.features;
-      state.counts={100:ds.filter(function(f){return f.properties.w1===1}).length,
-                    300:ds.filter(function(f){return f.properties.w3===1}).length,total:ds.length};
+      // підсумки
+      var t=B.features.length,n={1:0,2:0,3:0};
+      B.features.forEach(function(f){n[f.properties.c]++});
+      [1,2,3].forEach(function(k){
+        document.getElementById('p'+k).textContent=pc(n[k],t)+' %';
+        document.getElementById('n'+k).textContent=fmt(n[k])+' з '+fmt(t)+' будівель';
+        setTimeout(function(){document.getElementById('s'+k).style.width=(n[k]/t*100)+'%'},80);
+      });
+      document.getElementById('shN').textContent=fmt(S.features.length);
 
-      // стартовий кадр: забудоване ядро району
-      var b=new maplibregl.LngLatBounds();
-      var dg=dist.features[0].geometry,polys=dg.type==='Polygon'?[dg.coordinates]:dg.coordinates;
-      function pip(pt,ring){var x=pt[0],y=pt[1],c=false;for(var i=0,j=ring.length-1;i<ring.length;j=i++){var xi=ring[i][0],yi=ring[i][1],xj=ring[j][0],yj=ring[j][1];if(((yi>y)!==(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi))c=!c}return c}
-      var nIn=0,xs=[],ys=[];
-      S.features.forEach(function(f){var c=f.geometry.coordinates;if(polys.some(function(p){return pip(c,p[0])})){nIn++;xs.push(c[0]);ys.push(c[1])}});
-      xs.sort(function(a,b){return a-b});ys.sort(function(a,b){return a-b});
+      // стартовий кадр: забудоване ядро
+      var xs=S.features.map(function(f){return f.geometry.coordinates[0]}).sort(function(a,b){return a-b}),
+          ys=S.features.map(function(f){return f.geometry.coordinates[1]}).sort(function(a,b){return a-b});
       var q=function(a,k){return a[Math.floor(k*(a.length-1))]};
-      b.extend([q(xs,.05),q(ys,0)]);b.extend([q(xs,.97),q(ys,.97)]);
-      document.getElementById('shN').textContent=fmt(nIn);
+      var b=new maplibregl.LngLatBounds([q(xs,.04),q(ys,0)],[q(xs,1),q(ys,.97)]);
       var wide=window.innerWidth>760;
-      map.fitBounds(b,{padding:wide?{top:60,bottom:60,left:440,right:60}:{top:20,bottom:window.innerHeight*.5,left:10,right:10},duration:0});
-
-      setRadius(100);
+      map.fitBounds(b,{padding:wide?{top:60,bottom:60,left:440,right:60}:{top:20,bottom:window.innerHeight*.52,left:10,right:10},duration:0});
     }).catch(function(e){
-      state.failed=true;var L=document.getElementById('loading');L.classList.remove('off');L.textContent='Не вдалося завантажити дані карти';
+      failed=true;var L=document.getElementById('loading');L.classList.remove('off');L.textContent='Не вдалося завантажити дані карти';
       console.error(e);
     });
   }
   if(map.isStyleLoaded())start();else map.once('style.load',start);
-  function hideL(){if(!state.failed)document.getElementById('loading').classList.add('off')}
+  function hideL(){if(!failed)document.getElementById('loading').classList.add('off')}
   map.once('idle',hideL);
   setTimeout(hideL,7000);
-
-  function tween(to){
-    cancelAnimationFrame(state.raf);
-    var from=state.pct,t0=performance.now(),dur=900,el=document.getElementById('pct');
-    (function step(t){
-      var k=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-k,3),v=from+(to-from)*e;
-      el.textContent=v.toFixed(1).replace('.',',');state.pct=v;
-      if(k<1)state.raf=requestAnimationFrame(step);
-    })(t0);
-  }
-
-  function setRadius(r){
-    state.r=r;
-    var c=state.counts,n=c[r],t=c.total,p=n/t*100;
-    document.getElementById('title').textContent=TITLES[r];
-    document.getElementById('cap').innerHTML='будівель повністю в зоні <b>'+r+' м</b> від укриття';
-    document.getElementById('inN').textContent=fmt(n)+' з '+fmt(t)+' будівель';
-    document.getElementById('outN').textContent=fmt(t-n)+' без укриття';
-    document.getElementById('zoneLbl').textContent='Зона '+r+' м від укриттів';
-    document.getElementById('barfill').style.width=p+'%';
-    tween(p);
-    document.querySelectorAll('.seg button').forEach(function(b){b.setAttribute('aria-pressed',String(+b.dataset.r===r))});
-    map.setPaintProperty('bld','fill-color',fillExpr(r));
-    [100,300].forEach(function(x){
-      map.setPaintProperty('cover'+x,'fill-opacity',x===r?(x===100?.34:.26):0);
-      map.setPaintProperty('edge'+x,'line-opacity',x===r?.95:0);
-    });
-  }
-
-  document.querySelectorAll('.seg button').forEach(function(b){
-    b.addEventListener('click',function(){var r=+b.dataset.r;if(r!==state.r&&state.counts)setRadius(r)});
-  });
 })();
 </script>
 </body>
