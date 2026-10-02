@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Доступність укриттів у Києві та на Оболоні</title>
+<meta name="description" content="Відстань від будівель Києва та Оболонського району до найближчого укриття.">
+<style>
+:root{
+  --blue:#00398A; --blue-dk:#00275F; --blue-mid:#A3B8D5; --blue-light:#CCD7E8; --blue-pale:#EEF2F9;
+  --coral:#F85332; --amber:#E8A21F; --green:#2E9E63;
+  --ink:#1b2430; --muted:#5b6675; --line:#dfe5ee; --bg:#fff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.65 "Inter","Segoe UI",system-ui,-apple-system,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+.narrow{max-width:720px}
+header.hero{background:var(--blue);color:#fff;padding:72px 0 64px}
+.kicker{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue-mid);font-weight:600;margin:0 0 20px}
+h1{font-size:clamp(30px,5vw,48px);line-height:1.12;margin:0 0 22px;font-weight:700;letter-spacing:-.01em;max-width:860px}
+.hero p.sub{font-size:19px;line-height:1.55;color:var(--blue-light);max-width:680px;margin:0}
+.ask{font-size:clamp(22px,3vw,28px);font-weight:600;color:#fff;margin:0 0 18px}
+.hero p.sub{margin:0;font-size:15.5px;line-height:1.55;max-width:600px}
+.byline{margin-top:36px;font-size:13.5px;color:var(--blue-mid)}
+section{padding:64px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:0}
+h2{font-size:clamp(24px,3.2vw,32px);line-height:1.2;margin:0 0 20px;color:var(--blue);font-weight:700;letter-spacing:-.005em;max-width:760px}
+p{margin:0 0 16px}
+.muted{color:var(--muted)}
+.big{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:28px;margin:36px 0 8px}
+.big div{border-top:3px solid var(--blue);padding-top:14px}
+.big b{display:block;font-size:44px;line-height:1.05;color:var(--blue);font-weight:700;letter-spacing:-.02em}
+.big b.red{color:var(--coral)}
+.big span{display:block;margin-top:8px;font-size:14.5px;line-height:1.45;color:var(--muted)}
+.fig{margin:32px 0 0}
+.fig h3{font-size:15px;font-weight:600;margin:0 0 4px;color:var(--ink)}
+.fig .cap{font-size:13.5px;color:var(--muted);margin:0 0 14px}
+.stack{display:flex;height:34px;border-radius:4px;overflow:hidden}
+.stack i{display:block;height:100%}
+.keys{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px 24px;margin-top:14px;font-size:14px}
+.keys div{display:flex;align-items:center;gap:9px}
+.keys .sw{width:12px;height:12px;border-radius:2px;flex:none}
+.keys b{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:600}
+.mapbox{margin:32px 0 0;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--blue-pale)}
+.mapbox iframe{display:block;width:100%;height:680px;border:0}
+.mapbox a{display:block;padding:10px 14px;font-size:13px;color:var(--blue);text-decoration:none;border-top:1px solid var(--line);background:#fff}
+table{width:100%;border-collapse:collapse;margin-top:28px;font-size:15.5px}
+th{text-align:left;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:0 10px 10px;border-bottom:2px solid var(--blue)}
+td{padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+td.r{width:36px;color:var(--muted);font-variant-numeric:tabular-nums}
+tr.hl td{background:var(--blue-pale);font-weight:600}
+.bar{height:10px;background:var(--line);border-radius:5px;overflow:hidden;min-width:120px}
+.bar i{display:block;height:100%;background:var(--blue-mid)}
+tr.hl .bar i{background:var(--blue)}
+.tbl-note{font-size:13.5px;color:var(--muted);margin-top:12px}
+.finale{margin:40px 0 0;border-top:3px solid var(--blue)}
+.finale p{margin:0;padding:16px 0;border-bottom:1px solid var(--line);font-size:22px;line-height:1.35;color:var(--blue-dk)}
+.finale b{color:var(--coral);font-size:30px;margin-right:6px;letter-spacing:-.01em}
+.closing{background:var(--blue);color:#fff;padding:72px 0;text-align:left}
+.closing p{margin:0;font-size:clamp(28px,4.4vw,44px);line-height:1.2;font-weight:700;max-width:820px;letter-spacing:-.01em}
+.pull{border-left:4px solid var(--blue);padding:4px 0 4px 20px;margin:28px 0;font-size:20px;line-height:1.5;color:var(--blue-dk);font-weight:500;max-width:720px}
+ol.src{padding-left:20px;font-size:15px;color:var(--muted)}
+ol.src li{margin-bottom:8px}
+a{color:var(--blue)}
+footer{background:var(--blue-dk);color:var(--blue-mid);padding:36px 0;font-size:14px}
+@media(max-width:640px){body{font-size:16px}.mapbox iframe{height:560px}section{padding:44px 0}.big b{font-size:36px}.hide-s{display:none}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">Аналіз просторової доступності</p>
+    <h1>Укриття в Києві: скільки будівель мають його поруч</h1>
+    <p class="ask">Де найбільше потрібні укриття?</p>
+    <p class="sub">Обстріли Києва частішають, зима близько, і без укриття біля дому під загрозою кожен із нас. Через їх брак закриваються школи й університети: наслідки ми відчуємо і зараз, і в майбутньому.</p>
+    <p class="byline">Дані про укриття: Kyiv Digital Data Portal, станом на 28.05.2026</p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="narrow">
+      <h2>Місто з чотирма тисячами укриттів</h2>
+      <p>У Києві зафіксовано 4 190 укриттів і 99 104 будівлі. Нормативна відстань, у межах якої укриття має бути доступним, становить 300 м для багатоповерхової забудови (ДБН В.2.2-5:2023, п. 5.5). За порадами ДСНС, при загрозі застосування швидкісних видів озброєння найкраща відстань до укриття — до 100 м.</p>
+    </div>
+    <div class="big">
+      <div><b>19,7 %</b><span>будівель Києва стоять у межах 100 м від укриття</span></div>
+      <div><b>59,1 %</b><span>будівель — у межах 300 м</span></div>
+      <div><b class="red">23,8 %</b><span>будівель віддалені від укриття більш ніж на 500 м</span></div>
+    </div>
+
+    <div class="fig">
+      <h3>Розподіл будівель Києва за відстанню до найближчого укриття</h3>
+      <p class="cap">Відстань від центроїда будівлі до найближчого укриття</p>
+      <div class="stack">
+        <i style="width:19.7%;background:#A3B8D5"></i><i style="width:23.9%;background:#FFF58D"></i><i style="width:15.5%;background:#FFC98B"></i><i style="width:17.1%;background:#FFA53E"></i><i style="width:16.7%;background:#F85332"></i><i style="width:7.1%;background:#A82410"></i>
+      </div>
+      <div class="keys">
+        <div><span class="sw" style="background:#A3B8D5"></span>до 100 м<b>19,7 %</b></div>
+        <div><span class="sw" style="background:#FFF58D"></span>100–200 м<b>23,9 %</b></div>
+        <div><span class="sw" style="background:#FFC98B"></span>200–300 м<b>15,5 %</b></div>
+        <div><span class="sw" style="background:#FFA53E"></span>300–500 м<b>17,1 %</b></div>
+        <div><span class="sw" style="background:#F85332"></span>500–1000 м<b>16,7 %</b></div>
+        <div><span class="sw" style="background:#A82410"></span>понад 1000 м<b>7,1 %</b></div>
+      </div>
+    </div>
+
+    <div class="mapbox">
+      <iframe src="../viewer/viewer.html" title="Карта відстані від будівель до найближчого укриття, Київ" loading="lazy"></iframe>
+      <a href="../viewer/viewer.html" target="_blank" rel="noopener">Відкрити карту на весь екран →</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="narrow">
+      <h2>Рейтинг районів за досяжністю укриттів у радіусі 300 м</h2>
+      <p>Показник — частка будівель, які повністю лежать у 300-метровій зоні від укриття. Найменше укриттів поруч із будинками бракує в трьох районах: Оболонському (53,8 %), Деснянському (50,0 %) та Дарницькому (42,6 %).</p>
+    </div>
+    <table id="rank">
+      <thead><tr><th>#</th><th>Район</th><th class="n hide-s">Будівель</th><th class="n hide-s">У межах 100 м</th><th class="n">У межах 300 м</th><th class="n">Частка, 300 м</th><th class="hide-s" style="width:20%"></th></tr></thead>
+      <tbody></tbody><tfoot></tfoot>
+    </table>
+    <p class="tbl-note">Будівля враховується, якщо вона повністю лежить у зоні від укриття. Усі 4 190 укриттів міста враховано в розрахунку для кожного району.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="narrow">
+      <h2>Оболонь: 412 укриттів і 8 587 будівель</h2>
+      <p>На Оболоні розташовано 412 укриттів. Жодне з них не позначене на мапі доступних укриттів ЛУН, тож підтвердити, що двері відчинені й укриття придатне, неможливо.</p>
+      <p>У 300-метровій зоні від укриття повністю лежать 4 619 будівель із 8 587 — 53,8 %. Це восьме місце з десяти.</p>
+    </div>
+    <div class="big">
+      <div><b>1 442</b><span>будівлі (16,8 %) повністю у межах 100 м від укриття</span></div>
+      <div><b>4 619</b><span>будівель (53,8 %) повністю у межах 300 м</span></div>
+      <div><b class="red">3 968</b><span>будівель (46,2 %) поза межами 300 м</span></div>
+    </div>
+
+    <div class="fig">
+      <h3>Оболонський район: будівлі за доступністю укриття</h3>
+      <p class="cap">8 587 будівель; будівля враховується, якщо повністю лежить у зоні</p>
+      <div class="stack">
+        <i style="width:16.8%;background:#2E9E63"></i><i style="width:37.0%;background:#F5B82E"></i><i style="width:46.2%;background:#E04F3F"></i>
+      </div>
+      <div class="keys">
+        <div><span class="sw" style="background:#2E9E63"></span>до 100 м · 1 442<b>16,8 %</b></div>
+        <div><span class="sw" style="background:#F5B82E"></span>100–300 м · 3 177<b>37,0 %</b></div>
+        <div><span class="sw" style="background:#E04F3F"></span>понад 300 м · 3 968<b>46,2 %</b></div>
+      </div>
+    </div>
+
+    <div class="mapbox">
+      <iframe src="../obolon/" title="Карта доступності укриттів, Оболонський район" loading="lazy"></iframe>
+      <a href="../obolon/" target="_blank" rel="noopener">Відкрити карту на весь екран →</a>
+    </div>
+
+    <div class="narrow">
+      <div class="finale">
+        <p><b>412</b> укриттів, і жодне не підтверджене як доступне.</p>
+        <p><b>3 968</b> будівель далі ніж за 300 м від укриття.</p>
+        <p><b>5 з 6</b> будівель далі ніж за 100 м.</p>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+<div class="closing"><div class="wrap"><p>І на Оболоні не потрібні нові укриття?</p></div></div>
+
+<section>
+  <div class="wrap narrow">
+    <h2>Методологія та джерела</h2>
+    <p>Для кожної будівлі визначено, чи лежить вона повністю в об’єднаній зоні 100 м і 300 м навколо укриттів (EPSG:6384). Для Оболоні в розрахунок включено укриття всього Києва, оскільки зони сусідніх районів заходять на територію району. Теплова мапа міста показує відстань від центроїда будівлі до найближчого укриття.</p>
+    <p>Укриття — номінально наявні за даними порталу; вони не гарантують, що укриття відкриті й придатні. Місткість не враховано.</p>
+    <ol class="src">
+      <li>Укриття: <a href="https://data.kyivcity.gov.ua/dataset/dani-pro-roztashuvannia-zakhysnykh-sporud-tsyvilnoho-zakhystu-dep-municipal/resource/379a7295-22ae-4031-8aaf-2a5e7c8df178" target="_blank" rel="noopener">Kyiv Digital Data Portal, станом на 28.05.2026.</a></li>
+      <li><a href="https://e-construction.gov.ua/laws_detail/3225773063500990463?doc_type=2" target="_blank" rel="noopener">ДБН В.2.2-5:2023, п. 5.5.</a></li>
+      <li>ДСНС. Рекомендації щодо організації укриття: <a href="https://dsns.gov.ua/upload/6/1/7/3/8/8/V664V79YQEyPpn5fJXZ5mInpYzp56m7ARpM1nAWJ.pdf" target="_blank" rel="noopener">dsns.gov.ua</a></li>
+      <li><a href="https://lun.ua/misto/barrier-free?l=2000#5/47.99/31" target="_blank" rel="noopener">Мапа доступних укриттів ЛУН.</a></li>
+    </ol>
+  </div>
+</section>
+
+
+<script>
+const D=[
+ ["Печерський",4206,1274,3462],["Шевченківський",9179,1846,7883],["Дніпровський",10655,1813,6157],
+ ["Оболонський",8587,1442,4619,1],["Голосіївський",12909,1981,7116],["Святошинський",11152,1632,6340],
+ ["Подільський",10091,1452,5733],["Солом’янський",12929,1744,7089],["Дарницький",12477,1651,5317],["Деснянський",6919,827,3459]];
+const f=x=>x.toFixed(1).replace('.',',');
+const g=x=>String(x).replace(/\B(?=(\d{3})+(?!\d))/g,'\u202f');
+const tb=document.querySelector('#rank tbody');
+D.sort((a,b)=>b[3]/b[1]-a[3]/a[1]).forEach((d,i)=>{
+  const p=d[3]/d[1]*100,q=d[2]/d[1]*100;
+  const tr=document.createElement('tr'); if(d[4]) tr.className='hl';
+  tr.innerHTML=`<td class="r">${i+1}</td><td>${d[0]}</td><td class="n hide-s">${g(d[1])}</td><td class="n hide-s">${g(d[2])} · ${f(q)} %</td><td class="n">${g(d[3])}</td><td class="n">${f(p)} %</td><td class="hide-s"><div class="bar"><i style="width:${p}%"></i></div></td>`;
+  tb.appendChild(tr);
+});
+const T=D.reduce((a,d)=>[a[0]+d[1],a[1]+d[2],a[2]+d[3]],[0,0,0]);
+document.querySelector('#rank tfoot').innerHTML=`<tr><td></td><td><b>Київ</b></td><td class="n hide-s"><b>${g(T[0])}</b></td><td class="n hide-s"><b>${g(T[1])} · ${f(T[1]/T[0]*100)} %</b></td><td class="n"><b>${g(T[2])}</b></td><td class="n"><b>${f(T[2]/T[0]*100)} %</b></td><td class="hide-s"></td></tr>`;
+</script>
+</body>
+</html>
