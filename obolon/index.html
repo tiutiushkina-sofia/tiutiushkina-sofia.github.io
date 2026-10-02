@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;800&display=swap" rel="stylesheet">
-<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+<link href="maplibre-gl.css" rel="stylesheet">
 <style>
 :root{
   --navy:#00398A; --night:#061633; --ink:#0a1f44;
@@ -108,7 +108,7 @@ h1{margin:6px 0 0;font-size:25px;line-height:1.2;font-weight:800;letter-spacing:
   <p class="note">Відстань рахується по прямій від центроїда будівлі до найближчого укриття, з урахуванням укриттів сусідніх районів. У вибірці всі будівлі OpenStreetMap, зокрема гаражі та господарські споруди; місткість укриттів не враховано. Дані: OpenStreetMap, база укриттів. Аналіз: <span id="author">KSE Institute</span>.</p>
 </aside>
 
-<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.min.js"></script>
+<script src="maplibre-gl.js"></script>
 <script>
 (function(){
   var C={cyan:'#4ED9E8',coral:'#F85332',yellow:'#FFF58D',navy:'#00398A'};
@@ -137,7 +137,9 @@ h1{margin:6px 0 0;font-size:25px;line-height:1.2;font-weight:800;letter-spacing:
 
   function load(n){return fetch('data/'+n+'.geojson').then(function(r){if(!r.ok)throw new Error(n);return r.json()})}
 
-  map.on('load',function(){
+  var started=false;
+  function start(){
+    if(started)return;started=true;
     Promise.all(['buildings','shelters','cover100','cover300','rings100','rings300','district','mask'].map(load)).then(function(d){
       var B=d[0],S=d[1],cv1=d[2],cv3=d[3],rg1=d[4],rg3=d[5],dist=d[6],mask=d[7];
       var add=function(id,data){map.addSource(id,{type:'geojson',data:data})};
@@ -195,10 +197,14 @@ h1{margin:6px 0 0;font-size:25px;line-height:1.2;font-weight:800;letter-spacing:
       setRadius(100,true);
       document.getElementById('loading').classList.add('off');
     }).catch(function(e){
-      document.getElementById('loading').textContent='Не вдалося завантажити дані карти';
+      state.failed=true;var L=document.getElementById('loading');L.classList.remove('off');L.textContent='Не вдалося завантажити дані карти';
       console.error(e);
     });
-  });
+  }
+  if(map.isStyleLoaded())start();else map.once('style.load',start);
+  function hideL(){if(!state.failed)document.getElementById('loading').classList.add('off')}
+  map.once('idle',hideL);
+  setTimeout(hideL,7000);
 
   function tween(to){
     cancelAnimationFrame(state.raf);
